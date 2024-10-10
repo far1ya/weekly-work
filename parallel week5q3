@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <omp.h>
+
+#define ARRAY_SIZE 100  // Adjust for testing; use a smaller size for visibility
+
+int main() {
+    int array[ARRAY_SIZE];  // Fixed-size array
+    int last_value = 0;     // Variable to capture the last initialized value
+
+    // Number of threads to use
+    int num_threads = 4;
+
+    #pragma omp parallel num_threads(num_threads) firstprivate(last_value)
+    {
+        // Each thread has its own starting point based on its thread number
+        int thread_id = omp_get_thread_num();
+        int start_value = thread_id * (ARRAY_SIZE / num_threads) + 1;
+
+        // Initialize array elements in chunks
+        #pragma omp for nowait
+        for (int i = 0; i < ARRAY_SIZE; i++) {
+            array[i] = start_value + i;
+        }
+
+        // Capture the last initialized value by each thread
+        last_value = start_value + (ARRAY_SIZE / num_threads) - 1;
+    } // End of parallel region
+
+    // Print the last value initialized by the last thread
+    printf("Last initialized value: %d\n", last_value);
+    
+    // Print the initialized array (for verification)
+    printf("Initialized array: ");
+    for (int i = 0; i < ARRAY_SIZE; i++) {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
