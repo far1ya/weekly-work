@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <omp.h>
+
+#define ARRAY_SIZE 100000000  // Size of the array
+
+// Function to initialize the array
+void initialize_array(int *array, int size) {
+    for (int i = 0; i < size; i++) {
+        array[i] = i + 1;  // Fill with 1, 2, ..., size
+    }
+}
+
+// Sequential sum function
+long long sequential_sum(int *array, int size) {
+    long long sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += array[i];
+    }
+    return sum;
+}
+
+// Parallel sum function using OpenMP
+long long parallel_sum(int *array, int size) {
+    long long sum = 0;
+    
+    #pragma omp parallel 
+    {
+        long long private_sum = 0;  // Each thread has its own private sum
+        #pragma omp for
+        for (int i = 0; i < size; i++) {
+            private_sum += array[i];
+        }
+
+        #pragma omp atomic
+        sum += private_sum;  // Update the shared sum safely
+    }
+    
+    return sum;
+}
+
+int main() {
+    int *array = (int *)malloc(ARRAY_SIZE * sizeof(int));
+    if (!array) {
+        perror("Failed to allocate memory");
+        return EXIT_FAILURE;
+    }
+    
+    // Initialize the array
+    initialize_array(array, ARRAY_SIZE);
+
+    // Measure sequential sum
+    long long seq_result = sequential_sum(array, ARRAY_SIZE);
+    printf("Sequential sum: %lld\n", seq_result);
+    
+    // Measure parallel sum
+    long long par_result = parallel_sum(array, ARRAY_SIZE);
+    printf("Parallel sum: %lld\n", par_result);
+
+    // Free allocated memory
+    free(array);
+    return 0;
+}
