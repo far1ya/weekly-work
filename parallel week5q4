@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <omp.h>
+
+#define ARRAY_SIZE 100  // Adjust this for testing; can be larger if needed
+
+int main() {
+    int array[ARRAY_SIZE];  // Fixed-size array
+    int last_index = 0;     // Variable to capture the last processed index
+
+    // Initialize the array with values from 1 to ARRAY_SIZE
+    for (int i = 0; i < ARRAY_SIZE; i++) {
+        array[i] = i + 1;  // Fill with 1, 2, ..., ARRAY_SIZE
+    }
+
+    // Number of threads to use
+    int num_threads = 4;
+
+    #pragma omp parallel num_threads(num_threads) firstprivate(last_index)
+    {
+        int thread_id = omp_get_thread_num();
+        int chunk_size = ARRAY_SIZE / num_threads;  // Calculate chunk size
+        int start_index = thread_id * chunk_size;   // Starting index for each thread
+        int end_index = (thread_id == num_threads - 1) ? ARRAY_SIZE : start_index + chunk_size; // Handle last chunk
+
+        // Double the values in the assigned portion of the array
+        #pragma omp for nowait
+        for (int i = start_index; i < end_index; i++) {
+            array[i] *= 2;  // Double the value
+            last_index = i;  // Capture the last processed index
+        }
+    } // End of parallel region
+
+    // Print the last processed index by the last thread
+    printf("Last processed index: %d\n", last_index);
+    
+    // Print the doubled array (for verification)
+    printf("Doubled array: ");
+    for (int i = 0; i < ARRAY_SIZE; i++) {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
