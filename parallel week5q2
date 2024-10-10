@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <omp.h>
+
+#define ARRAY_SIZE 100000000  // Size of the array
+
+// Function to initialize the array
+void initialize_array(int array[]) {
+    for (int i = 0; i < ARRAY_SIZE; i++) {
+        array[i] = i + 1;  // Fill with 1, 2, ..., size
+    }
+}
+
+// Sequential average function
+double sequential_average(int array[]) {
+    long long sum = 0;
+    for (int i = 0; i < ARRAY_SIZE; i++) {
+        sum += array[i];
+    }
+    return (double)sum / ARRAY_SIZE;
+}
+
+// Parallel average function using OpenMP
+double parallel_average(int array[]) {
+    long long sum = 0;
+
+    #pragma omp parallel 
+    {
+        long long private_sum = 0;  // Each thread's private sum
+        
+        #pragma omp for
+        for (int i = 0; i < ARRAY_SIZE; i++) {
+            private_sum += array[i];
+        }
+
+        #pragma omp atomic
+        sum += private_sum;  // Update the shared sum safely
+    }
+
+    return (double)sum / ARRAY_SIZE;  // Return the average
+}
+
+int main() {
+    int array[ARRAY_SIZE];  // Fixed-size array
+
+    // Initialize the array
+    initialize_array(array);
+
+    // Measure sequential average
+    double seq_result = sequential_average(array);
+    printf("Sequential average: %f\n", seq_result);
+
+    // Measure parallel average
+    double par_result = parallel_average(array);
+    printf("Parallel average: %f\n", par_result);
+
+    return 0;
+}
