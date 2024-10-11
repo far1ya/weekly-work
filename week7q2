@@ -1,0 +1,57 @@
+#include <stdio.h>
+
+int main() {
+    int n, time_quantum;
+
+    // Get the number of processes and time quantum
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+    printf("Enter time quantum: ");
+    scanf("%d", &time_quantum);
+
+    int arrival_time[n], burst_time[n], remaining_time[n], waiting_time[n], turnaround_time[n];
+
+    // Input arrival and burst times for each process
+    for (int i = 0; i < n; i++) {
+        printf("Enter arrival time for process %d: ", i + 1);
+        scanf("%d", &arrival_time[i]);
+        printf("Enter burst time for process %d: ", i + 1);
+        scanf("%d", &burst_time[i]);
+        remaining_time[i] = burst_time[i]; // Initialize remaining time
+        waiting_time[i] = 0; // Initialize waiting time
+    }
+
+    int time = 0; // Current time
+    int done; // Flag to check if all processes are done
+
+    // Round Robin scheduling
+    do {
+        done = 1; // Assume all processes are done
+        for (int i = 0; i < n; i++) {
+            if (remaining_time[i] > 0 && arrival_time[i] <= time) {
+                done = 0; // There are processes left to execute
+                if (remaining_time[i] > time_quantum) {
+                    time += time_quantum; // Process runs for time quantum
+                    remaining_time[i] -= time_quantum;
+                } else {
+                    time += remaining_time[i]; // Process finishes
+                    waiting_time[i] = time - burst_time[i] - arrival_time[i]; // Calculate waiting time
+                    remaining_time[i] = 0; // Process is done
+                }
+            }
+        }
+    } while (!done); // Repeat until all processes are done
+
+    // Calculate turnaround time
+    for (int i = 0; i < n; i++) {
+        turnaround_time[i] = waiting_time[i] + burst_time[i];
+    }
+
+    // Print results
+    printf("\nProcess ID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\n", i + 1, arrival_time[i], burst_time[i], waiting_time[i], turnaround_time[i]);
+    }
+
+    return 0;
+}
