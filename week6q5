@@ -1,0 +1,13 @@
+#!/bin/bash
+read -p "enter length: " l
+read -p "enter breadth: " b
+read -p "enter radius: " r
+areaRectangle=$(echo "$l * $b" | bc)
+areaCircle=$(echo "3.14 * $r * $r" | bc)
+circumCircle=$(echo "2 * 3.14 * $r" | bc)
+perimeterRect=$(echo "2 * $l + $b" | bc)
+echo "area of rectangle: $areaRectangle"
+echo "area of circle: $areaCircle"
+echo "circumference: $circumCircle"
+echo "perimeter of rectangle: $perimeterRect"
+
