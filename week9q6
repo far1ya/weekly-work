@@ -1,0 +1,15 @@
+
+#!bin/bash
+if [ "$#" -ne 2 ]; then
+echo "usage:$0 <file1> <file2>"
+exit 1
+fi
+file1=$1
+file2=$2
+if cmp -s "$file1" "$file2"; then
+echo "the files '$file1' and '$file2' are same"
+rm "$file2"
+echo "deleted '$file2' "
+else
+echo " the files '$file1' and '$file2' are different "
+fi
