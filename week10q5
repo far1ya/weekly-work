@@ -1,0 +1,14 @@
+#!/bin/bash
+if [ -z "$1" ]; then
+   echo "Provide an argument(one/two/three)! "
+   exit 1
+ fi
+ if [ "$1" == "one" ]; then
+   echo -e "\033[1m$1\033[0m" #bold
+ elif [ "$1" == "two" ]; then
+    echo "$1" | rev #reverse
+ elif [ "$1" == "three" ]; then
+    echo -e "\033[5m$1\033[0m" #blink
+ else
+   echo "Invalid argument. Please supply 'one', 'two', or 'three'."
+fi
