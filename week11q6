@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Enter the base number: "
+read base
+
+echo "Enter the exponent: "
+read exponent
+
+result=$((base ** exponent))
+
+echo "$base raised to the power of $exponent is $result."
