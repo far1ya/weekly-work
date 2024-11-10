@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Check if a path is supplied as an argument
+if [ -z "$1" ]; then
+    echo "Please provide a path as a command-line argument."
+    exit 1
+fi
+
+# Check if the supplied path is a valid directory
+if [ ! -d "$1" ]; then
+    echo "The provided path is not a valid directory."
+    exit 1
+fi
+
+# Loop through each subdirectory in the provided path
+for dir in "$1"/*; do
+    # Check if it's a directory
+    if [ -d "$dir" ]; then
+        # Count the number of entries (files and subdirectories) in the subdirectory
+        entry_count=$(ls -1 "$dir" | wc -l)
+        
+        # Report the number of entries in the subdirectory
+        echo "Directory: $dir contains $entry_count entries."
+    fi
+done
