@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Create a file
+echo "This is a sample file." > myfile.txt
+echo "File 'myfile.txt' created."
+
+# Check if the file is created
+if [ -f myfile.txt ]; then
+    echo "File 'myfile.txt' exists."
+fi
+
+# Delete the file
+rm myfile.txt
+echo "File 'myfile.txt' deleted."
+
+# Check if the file is deleted
+if [ ! -f myfile.txt ]; then
+    echo "File 'myfile.txt' has been deleted."
+fi
