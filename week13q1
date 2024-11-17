@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# A basic script to demonstrate file-related commands
+
+echo "Starting File Operations..."
+
+# 1. Create a new file and write to it
+echo "This is a test file created by the script." > testfile.txt
+echo "Created testfile.txt and added some text."
+
+# 2. Display the contents of the file
+echo "Contents of testfile.txt:"
+cat testfile.txt
+
+# 3. Append more content to the file
+echo "Appending more content to the file." >> testfile.txt
+echo "Appended text to testfile.txt."
+
+# 4. Show the updated contents
+echo "Updated contents of testfile.txt:"
+cat testfile.txt
+
+# 5. Copy the file to a new file
+cp testfile.txt testfile_copy.txt
+echo "Copied testfile.txt to testfile_copy.txt."
+
+# 6. Move (rename) the file
+mv testfile_copy.txt testfile_renamed.txt
+echo "Renamed testfile_copy.txt to testfile_renamed.txt."
+
+# 7. List files in the current directory
+echo "Listing files in the current directory:"
+ls -l
+
+# 8. Check file permissions
+echo "Checking permissions of testfile.txt:"
+ls -l testfile.txt
+
+# 9. Change file permissions
+chmod 644 testfile.txt
+echo "Changed permissions of testfile.txt to 644."
+
+# 10. Create a directory
+mkdir test_directory
+echo "Created a directory named test_directory."
+
+# 11. Move the file into the new directory
+mv testfile.txt test_directory/
+echo "Moved testfile.txt into test_directory."
+
+# 12. List files in the directory to verify
+echo "Files in test_directory:"
+ls -l test_directory/
+
+# 13. Delete the file and directory
+rm test_directory/testfile.txt
+rmdir test_directory
+echo "Deleted testfile.txt from test_directory and removed test_directory."
+
+echo "File operations completed."
