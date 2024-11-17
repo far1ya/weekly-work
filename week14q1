@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Check if the correct number of arguments is provided
+if [ $# -ne 3 ]; then
+    echo "Usage: $0 <file> <permissions> <owner:group>"
+    exit 1
+fi
+
+# Assign arguments to variables
+file="$1"
+permissions="$2"
+owner_group="$3"
+
+# Change the file permissions
+chmod "$permissions" "$file"
+echo "Permissions of '$file' changed to $permissions."
+
+# Change the file ownership
+chown "$owner_group" "$file"
+echo "Ownership of '$file' changed to $owner_group."
+
+# Show the updated details of the file
+ls -l "$file"
