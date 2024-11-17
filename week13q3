@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Check if any files are provided as arguments
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <file1> <file2> ... <fileN>"
+    exit 1
+fi
+
+# Loop through all provided files
+for file in "$@"; do
+    # Check if the file exists
+    if [ -f "$file" ]; then
+        # Delete lines containing the word "unix" (case-insensitive)
+        sed -i '/unix/Id' "$file"
+        echo "Removed lines containing 'unix' from $file"
+    else
+        echo "File '$file' does not exist."
+    fi
+done
